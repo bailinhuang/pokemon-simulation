@@ -1,0 +1,31 @@
+.simulation-board {
+
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid rgb(94, 161, 17);
+  
+  &__row {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    background: rgb(128, 223, 19);
+  }
+  
+  &__column {
+    border: 1px solid rgb(94, 161, 17);
+    flex: 1;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } 
+
+  &__pokemon-image {
+    object-fit: cover;
+    height: 80%;
+  }
+    
+}
