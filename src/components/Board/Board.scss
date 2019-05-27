@@ -21,11 +21,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 0.2rem;
   } 
 
   &__pokemon-image {
-    object-fit: cover;
-    height: 80%;
+    display: block;
+    max-width: 100%;
+    height: auto;
   }
     
 }
