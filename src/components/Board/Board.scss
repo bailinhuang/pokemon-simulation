@@ -5,17 +5,17 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid rgb(94, 161, 17);
+  border: 1px solid #7FAD71;
   
   &__row {
     display: flex;
     flex: 1;
     flex-wrap: wrap;
-    background: rgb(128, 223, 19);
+    background: #B0E46A;
   }
   
   &__column {
-    border: 1px solid rgb(94, 161, 17);
+    border: 1px solid #7FAD71;
     flex: 1;
     height: 60px;
     display: flex;

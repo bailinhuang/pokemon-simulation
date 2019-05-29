@@ -1,6 +1,7 @@
 export default class Hunter {
 
-  constructor(x, y, hp, pokemonCounter, pokemonKnowledge, sightDistance, fleeDistance) {
+  constructor(id, x, y, hp, pokemonCounter, pokemonKnowledge, sightDistance, fleeDistance) {
+    this.id = id;
     this.x = x;
     this.y = y;
     this.imageUrl = '/assets/trainer.png';
