@@ -222,7 +222,7 @@ class Simulation extends Component {
 
     if (count === 30 || pokemons.length === 0) {
       clearInterval(simulationInterval);
-      return;
+      return; 
     }
 
     hunters.forEach(hunter => {
