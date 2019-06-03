@@ -12,17 +12,22 @@ export const generateFirstGeneration = () => {
   const police = [];
 
   for (let i = 0; i < 40; i++) {
-    pokemons.push( generateRandomPokemon(pokemons, hunters, police) ); 
+    pokemons.push(generateRandomPokemon(pokemons, hunters, police));
   }
 
   for (let i = 0; i < 10; i++) {
     const coordinates = generateValidCoordinates(pokemons, hunters, police);
-    hunters.push( new Hunter("HUNTER-" + uuid(),coordinates[0], coordinates[1], 100, 0, {}, rows, 2) );
+    hunters.push(new Hunter("HUNTER-" + uuid(), coordinates[0], coordinates[1], 100, 0, {}, rows, 2));
+  }
+
+  for (let i = 0; i < 10; i++) {
+    const coordinates = generateValidCoordinates(pokemons, hunters, police);
+    police.push(new Police(coordinates[0], coordinates[1], 30));
   }
 
   for (let i = 0; i < 0; i++) {
     const coordinates = generateValidCoordinates(pokemons, hunters, police);
-    police.push( new Police(coordinates[0], coordinates[1], 3) );
+    police.push(new Police(coordinates[0], coordinates[1], 3));
   }
 
   return {
@@ -38,8 +43,8 @@ export const simulationTick = (simulationState) => {
   const { count, pokemons, hunters, police } = simulationState;
 
   if (count === 30 || pokemons.length === 0) {
-    return { 
-      ...simulationState, 
+    return {
+      ...simulationState,
       finished: true
     };
   }
@@ -52,12 +57,12 @@ export const simulationTick = (simulationState) => {
     takeAStep(policeman, pokemons, hunters, police);
   });
 
-  return { 
-    ...simulationState, 
-    hunters, 
-    police, 
-    pokemons, 
-    count: count + 1 
+  return {
+    ...simulationState,
+    hunters,
+    police,
+    pokemons,
+    count: count + 1
   };
 }
 
@@ -79,7 +84,7 @@ const generateValidCoordinates = (pokemons, hunters, police) => {
     someoneThere = isSomeoneThere(randomX, randomY, pokemons, hunters, police);
   }
 
-  return [ randomX, randomY ];
+  return [randomX, randomY];
 }
 
 /* Utils */
@@ -93,7 +98,7 @@ export const copySimulationState = (state) => {
 }
 
 const uuid = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
@@ -101,8 +106,8 @@ const uuid = () => {
 
 const copyArrayOfObjects = (array) => {
   array = [...array];
-  for(let i = 0; i < array.length; i++) {
-    array[i] = {...array[i]};
+  for (let i = 0; i < array.length; i++) {
+    array[i] = { ...array[i] };
   }
 
   return array;
@@ -114,28 +119,28 @@ const isOutOfBounds = (x, y) => {
 
 const isSomeoneThere = (x, y, pokemons, hunters, police) => {
   let someoneThere = false;
-  pokemons.forEach( pokemon => {
+  pokemons.forEach(pokemon => {
     someoneThere = someoneThere || (pokemon.x === x && pokemon.y === y);
   });
   if (someoneThere) return someoneThere;
 
-  hunters.forEach( hunter => {
+  hunters.forEach(hunter => {
     someoneThere = someoneThere || (hunter.x === x && hunter.y === y);
   });
   if (someoneThere) return someoneThere;
 
-  police.forEach( policeman => {
+  police.forEach(policeman => {
     someoneThere = someoneThere || (policeman.x === x && policeman.y === y);
   });
-  
+
   return someoneThere;
 }
 
 const getDistanceSq = (x1, y1, x2, y2) => {
   return (x1 - x2) *
-  (x1 - x2) +
-  (y1 - y2) *
-  (y1 - y2);
+    (x1 - x2) +
+    (y1 - y2) *
+    (y1 - y2);
 }
 
 const isInSight = (x1, y1, x2, y2, sightDistance) => {
@@ -144,26 +149,25 @@ const isInSight = (x1, y1, x2, y2, sightDistance) => {
   return distanceSq <= sightDistanceSq;
 }
 
-const getNearestInSightPokemon = (x, y, sightDistance, pokemons) => {
-  let nearestPokemon = null;
+const getNearestInSight = (x, y, sightDistance, entities) => {
+  let nearestEntity = null;
 
-  pokemons.forEach( pokemon => {
-    if ( isInSight(x, y, pokemon.x, pokemon.y, sightDistance) ) {
-      if (!nearestPokemon) {
-        nearestPokemon = pokemon;
+  entities.forEach(entity => {
+    if (isInSight(x, y, entity.x, entity.y, sightDistance)) {
+      if (!nearestEntity) {
+        nearestEntity = entity;
 
       } else {
-        const distanceSq = getDistanceSq(x, y, pokemon.x, pokemon.y);
-        const nearestPokemonDistanceSq = getDistanceSq(x, y, nearestPokemon.x, nearestPokemon.y);
+        const distanceSq = getDistanceSq(x, y, entity.x, entity.y);
+        const nearestPokemonDistanceSq = getDistanceSq(x, y, nearestEntity.x, nearestEntity.y);
 
-        if ( distanceSq < nearestPokemonDistanceSq) {
-          nearestPokemon = pokemon;
+        if (distanceSq < nearestPokemonDistanceSq) {
+          nearestEntity = entity;
         }
-      } 
+      }
     }
-  });
-
-  return nearestPokemon;
+  }); 
+  return nearestEntity;
 }
 
 const getMoveToGetCloseTo = (x1, y1, x2, y2) => {
@@ -175,11 +179,11 @@ const getMoveToGetCloseTo = (x1, y1, x2, y2) => {
 
   } else if (xDiff === 0 && yDiff < 0) {
     return [0, -1];
-  
+
   } else if (xDiff > 0 && yDiff < 0) {
     return [1, -1];
 
-  } else if(xDiff > 0 && yDiff === 0) {
+  } else if (xDiff > 0 && yDiff === 0) {
     return [1, 0];
 
   } else if (xDiff > 0 && yDiff > 0) {
@@ -206,38 +210,52 @@ const catchPokemon = (hunter, pokemonToCatch, pokemons, hunters, police) => {
   pokemons.push(generateRandomPokemon(pokemons, hunters, police));
 }
 
+const catchHunter = (hunterToCatch, hunters) => {
+  for (let i = 0; i < hunters.length; i++) {
+    if (hunters[i].id === hunterToCatch.id) hunters.splice(i, 1);
+  }
+}
 const takeAStep = (entity, pokemons, hunters, police) => {
   const moveOptions = [1, 0, -1];
-  let newX, newY;
-  
-  const pokemonToCatch = getNearestInSightPokemon(entity.x, entity.y, 1, pokemons);
-  if (pokemonToCatch) {
-    catchPokemon(entity, pokemonToCatch, pokemons, hunters, police);
-    return;
+  let newX, newY;   
+  if (entity.type === "hunter") {
+    const pokemonToCatch = getNearestInSight(entity.x, entity.y, 1, pokemons);
+    if (pokemonToCatch) {
+      catchPokemon(entity, pokemonToCatch, pokemons, hunters, police);
+      return;
+    }
+  }
+
+  if (entity.type === "police") {
+    const huntersToCatch = getNearestInSight(entity.x, entity.y, 1, hunters);
+    if (huntersToCatch) {
+      catchHunter(huntersToCatch, hunters);
+      return;
+    }
   }
 
   let invalidCoordinates = true;
   while (invalidCoordinates) {
 
-      const nearestPokemon = getNearestInSightPokemon(entity.x, entity.y, entity.sightDistance, pokemons);
-      let move;
-      let randomMove = true;
-      if (nearestPokemon) {
-        move = getMoveToGetCloseTo(entity.x, entity.y, nearestPokemon.x, nearestPokemon.y);
-        randomMove = isSomeoneThere(newX, newY, pokemons, hunters, police) ? randomMove : false;
+    const nearestPokemon = getNearestInSight(entity.x, entity.y, entity.sightDistance, pokemons);
+    let move;
+    let randomMove = true;
+    if (nearestPokemon) {
+      move = getMoveToGetCloseTo(entity.x, entity.y, nearestPokemon.x, nearestPokemon.y);
+      randomMove = isSomeoneThere(newX, newY, pokemons, hunters, police) ? randomMove : false;
 
-      } 
-      
-      if (randomMove) {
-        move = [ moveOptions[Math.floor(Math.random() * moveOptions.length)], 
-                moveOptions[Math.floor(Math.random() * moveOptions.length)] ];
-      }
+    }
 
-      newX = entity.x + move[0];
-      newY = entity.y + move[1];
-      
-      invalidCoordinates = isOutOfBounds(newX, newY)
-        || isSomeoneThere(newX, newY, pokemons, hunters, police);
+    if (randomMove) {
+      move = [moveOptions[Math.floor(Math.random() * moveOptions.length)],
+      moveOptions[Math.floor(Math.random() * moveOptions.length)]];
+    }
+
+    newX = entity.x + move[0];
+    newY = entity.y + move[1];
+
+    invalidCoordinates = isOutOfBounds(newX, newY)
+      || isSomeoneThere(newX, newY, pokemons, hunters, police);
   }
 
   entity.x = newX;

@@ -4,6 +4,7 @@ export default class Hunter {
     this.id = id;
     this.x = x;
     this.y = y;
+    this.type = "hunter"
     this.imageUrl = '/assets/trainer.png';
     this.hp = hp;
     this.pokemonCounter = pokemonCounter;
@@ -18,5 +19,13 @@ export default class Hunter {
 
   addPokemonknowledge(pokemon){
     this.pokemonKnowledge.push(pokemon);
+  }
+
+  isType(type){
+    if(type === "hunter"){
+      return true;
+    } else{
+      return false;
+    }
   }
 }
