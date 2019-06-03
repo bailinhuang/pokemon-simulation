@@ -68,6 +68,85 @@ const generateRandomPokemon = (pokemons, hunters, police) => {
   return new Pokemon("POKE-" + uuid(), coordinates[0], coordinates[1], pokemonTypes[randomChoice].type, pokemonTypes[randomChoice].url, 100, null, null)
 }
 
+export const cross = (simulationState) => {
+  const { pokemons, hunters, police } = simulationState;
+  // de hunter1 y hunter2, crear un nuevo hunter con el pokemon knowledge de ambos y
+  // la suma de flee distance de ambos siempre revisando que sea valido
+  // encontrar los 2 hunters con mas pokemon knowledge
+  // let newHunters = getFittestHunters(hunters);
+  let hunter1 = getRandomHunter(hunters);
+  let hunter2 = getRandomHunter(hunters);
+
+  Array.prototype.push.apply(hunter1.pokemonKnowledge,hunter2.pokemonKnowledge);
+
+  const coordinates = generateValidCoordinates(pokemons, hunters, police);
+  let hp = hunter1.hp + hunter2.hp;
+  let pokemonCount = Object.keys(hunter1.pokemonKnowledge).length;
+  let dist = hunter1.fleeDistance + hunter2.fleeDistance;
+  const newHunter = new Hunter("Hunter-" + uuid(), coordinates[0],coordinates[1],hp,pokemonCount,hunter1.pokemonKnowledge, hunter1.sightDistance, dist)
+  console.log("Created crossing!");
+  return newHunter;
+}
+
+export const mutate = (simulationState) => {
+  const { pokemons, hunters, police } = simulationState;
+
+  let hunter1, hunter2, newHunter;
+  hunter1 = getRandomHunter(hunters);
+  hunter2 = getRandomHunter(hunters);
+  const coordinates = generateValidCoordinates(pokemons, hunters, police);
+
+  let hp = Math.floor((hunter1.hp + hunter2.hp)/2);
+  let dist = (hunter1.fleeDistance + hunter2.fleeDistance)/2;
+  let pokemonCount = Object.keys(hunter1.pokemonKnowledge).length;
+  newHunter = new Hunter("Hunter-" + uuid(), coordinates[0],coordinates[1],hp,pokemonCount,hunter1.pokemonKnowledge, hunter2.sightDistance, dist);
+  console.log("Created mutation!")
+  return newHunter;
+}
+
+export const getNewGeneration = (simulationState) => {
+  const { pokemons, hunters, police } = simulationState;
+  let crossings = Math.floor(0.6 * hunters.length);
+  let mutations = Math.floor(0.4 * hunters.length)
+  console.log(crossings);
+  console.log(mutations);
+
+  let newGeneration = [];
+
+  for (let i = 0; i < crossings; i++){
+      let newHunter = cross(simulationState);
+      newGeneration.push(newHunter);
+  }
+
+  for (let i = 0; i < mutations; i++){
+    let newHunter = mutate(simulationState);
+    newGeneration.push(newHunter);
+}
+  return newGeneration;
+}
+
+function getFittestHunters(hunters) {
+    var hunter1, hunter2;
+    var maxKnowledge = 0;
+    var secondMax = 0;
+
+    hunters.forEach( hunter => {
+      var knowledgeSize = Object.keys(hunter.pokemonKnowledge).length;
+      if (knowledgeSize > maxKnowledge){
+        maxKnowledge = knowledgeSize;
+        hunter1 = hunter;
+      }
+      if (knowledgeSize > secondMax && knowledgeSize < maxKnowledge){
+        hunter2 = hunter;
+      }
+      });
+    return [hunter1, hunter2];
+}
+
+function getRandomHunter(hunters){
+  return hunters[Math.floor(Math.random()* hunters.length)];
+}
+
 const generateValidCoordinates = (pokemons, hunters, police) => {
   let randomX, randomY;
 
@@ -200,6 +279,8 @@ const getMoveToGetCloseTo = (x1, y1, x2, y2) => {
 
 const catchPokemon = (hunter, pokemonToCatch, pokemons, hunters, police) => {
   hunter.pokemonCounter += 1;
+  hunter.pokemonKnowledge[pokemonToCatch.type] = pokemonToCatch;
+
   for (let i = 0; i < pokemons.length; i++) {
     if (pokemons[i].id === pokemonToCatch.id) pokemons.splice(i, 1);
   }

@@ -10,7 +10,7 @@ export default class Hunter {
     this.pokemonKnowledge = pokemonKnowledge;
     this.sightDistance = sightDistance;
     this.fleeDistance = fleeDistance;
-  } 
+  }
 
   addPokemonCounter(){
     this.pokemonCounter += 1;

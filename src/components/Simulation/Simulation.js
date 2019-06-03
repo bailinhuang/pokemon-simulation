@@ -16,14 +16,20 @@ class Simulation extends Component {
     const { pokemons, hunters, police, finished } = this.state;
 
     const stateCopy = SimulationCore.copySimulationState(this.state);
-    if (!finished) 
+    if (!finished) {
       setTimeout(
         () => {
           const newState = SimulationCore.simulationTick(stateCopy);
           this.setState(newState);
+
         }
         , 1000
       );
+    } else {
+      let newGeneration = SimulationCore.getNewGeneration(this.state);
+      this.setState({hunters: newGeneration, finished: false})
+    }
+     
 
     return (
       <div className="simulation">
