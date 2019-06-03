@@ -5,7 +5,7 @@ export default class Hunter {
     this.x = x;
     this.y = y;
     this.type = "hunter"
-    this.imageUrl = '/assets/trainer.png';
+    this.imageUrl = '/assets/hunter.png';
     this.hp = hp;
     this.pokemonCounter = pokemonCounter;
     this.pokemonKnowledge = pokemonKnowledge;

@@ -3,6 +3,7 @@ import Board from '../Board/Board';
 
 import './Simulation.scss';
 import * as SimulationCore from '../../core/simulation';
+import Leaderboard from '../Leaderboard/Leaderboard';
 
 class Simulation extends Component {
 
@@ -34,6 +35,7 @@ class Simulation extends Component {
           rows={SimulationCore.rows}
           cols={SimulationCore.cols}
         />
+        <Leaderboard hunters={hunters}/>
       </div>
     );
   }

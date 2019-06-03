@@ -1,7 +1,8 @@
 .simulation {
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
   height: 100vh;
   background: url('/assets/background.png');
-  background-size: contain;
+  background-size: contain; 
 }
