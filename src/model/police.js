@@ -4,13 +4,6 @@ export default class Police {
     this.y = y; 
     this.imageUrl = '/assets/police.png';
     this.sightDistance = sightDistance;
-  }
-
-  addPokemonCounter(){
-    this.pokemonCounter += 1;
-  } 
-
-  addPokemonknowledge(pokemon){
-    this.pokemonKnowledge.push(pokemon);
-  } 
+    this.type = "police"
+  }  
 }

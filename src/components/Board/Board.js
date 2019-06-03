@@ -6,7 +6,7 @@ class Board extends Component {
 
   createEntityMatrix = () => {
     const { rows, cols, pokemons, hunters, police } = this.props;
-    
+
     const entityMatrix = [];
     let i, j;
     for (i = 0; i < rows; i++) {
@@ -42,13 +42,13 @@ class Board extends Component {
         {rowsArray.map((_, i) =>
           <div className="simulation-board__row" key={i}>
             {colsArray.map((_, j) =>
-              <div className="simulation-board__column" key={j}> 
-                { entityMatrix[i][j] ? 
-                    <img 
-                      className="simulation-board__pokemon-image"
-                      src={entityMatrix[i][j].imageUrl} alt=""/>
-                    : 
-                    null
+              <div className="simulation-board__column" key={j}>
+                {entityMatrix[i][j] ?
+                  <img
+                    className="simulation-board__pokemon-image"
+                    src={entityMatrix[i][j].imageUrl} alt="" />
+                  :
+                  null
                 }
               </div>
             )}
