@@ -22,5 +22,9 @@ export const pokemonTypes = [
   {
     type: 'squirtle',
     url: '/assets/squirtle.png'
+  },
+  {
+    type: 'pikachu',
+    url: '/assets/pikachu.png'
   }
 ]
