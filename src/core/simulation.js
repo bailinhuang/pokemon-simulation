@@ -29,13 +29,15 @@ export const generateFirstGeneration = () => {
     const coordinates = generateValidCoordinates(pokemons, hunters, police);
     police.push(new Police(coordinates[0], coordinates[1], 3));
   }
-
+  let generationHunters = hunters;
   return {
+    generationHunters,
     pokemons,
     hunters,
     police,
     finished: false,
-    count: 0
+    count: 0,
+    generationCounter: 0
   };
 }
 
@@ -74,13 +76,13 @@ const generateRandomPokemon = (pokemons, hunters, police) => {
 }
 
 export const cross = (simulationState) => {
-  const { pokemons, hunters, police } = simulationState;
+  const { pokemons, hunters, police, generationHunters } = simulationState;
   // de hunter1 y hunter2, crear un nuevo hunter con el pokemon knowledge de ambos y
   // la suma de flee distance de ambos siempre revisando que sea valido
   // encontrar los 2 hunters con mas pokemon knowledge
   // let newHunters = getFittestHunters(hunters);
-  let hunter1 = getRandomHunter(hunters);
-  let hunter2 = getRandomHunter(hunters);
+  let hunter1 = getRandomHunter(generationHunters);
+  let hunter2 = getRandomHunter(generationHunters);
 
   Array.prototype.push.apply(hunter1.pokemonKnowledge,hunter2.pokemonKnowledge);
 
@@ -94,11 +96,11 @@ export const cross = (simulationState) => {
 }
 
 export const mutate = (simulationState) => {
-  const { pokemons, hunters, police } = simulationState;
+  const { pokemons, hunters, police , generationHunters} = simulationState;
 
   let hunter1, hunter2, newHunter;
-  hunter1 = getRandomHunter(hunters);
-  hunter2 = getRandomHunter(hunters);
+  hunter1 = getRandomHunter(generationHunters);
+  hunter2 = getRandomHunter(generationHunters);
   const coordinates = generateValidCoordinates(pokemons, hunters, police);
 
   let hp = Math.floor((hunter1.hp + hunter2.hp)/2);
@@ -110,9 +112,9 @@ export const mutate = (simulationState) => {
 }
 
 export const getNewGeneration = (simulationState) => {
-  const { pokemons, hunters, police } = simulationState;
-  let crossings = Math.floor(0.6 * hunters.length);
-  let mutations = Math.floor(0.4 * hunters.length)
+  const { pokemons, hunters, police, generationHunters } = simulationState;
+  let crossings = Math.floor(0.6 * generationHunters.length);
+  let mutations = Math.floor(0.4 * generationHunters.length)
   console.log(crossings);
   console.log(mutations);
 
@@ -126,7 +128,7 @@ export const getNewGeneration = (simulationState) => {
   for (let i = 0; i < mutations; i++){
     let newHunter = mutate(simulationState);
     newGeneration.push(newHunter);
-}
+  }
   return newGeneration;
 }
 
