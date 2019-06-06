@@ -14,8 +14,9 @@ class Simulation extends Component {
   }
 
   render() {
-    const { pokemons, hunters, police, finished, generationCounter} = this.state;
+    let { pokemons, hunters, police, finished, generationCounter} = this.state;
     const stateCopy = SimulationCore.copySimulationState(this.state);
+    generationCounter = generationCounter + 1;
     if (!finished) {
       setTimeout(
         () => {
@@ -24,10 +25,9 @@ class Simulation extends Component {
         }
         , 1000
       );
-    } else {
-      debugger;
+    } else { 
       let newGeneration = SimulationCore.getNewGeneration(this.state);
-      this.setState({hunters: newGeneration, finished: false, generationCounter: generationCounter+1})
+      this.setState({hunters: newGeneration, finished: false, generationCounter: generationCounter, count: 0})
     }
     return (
       <div className="simulation">
