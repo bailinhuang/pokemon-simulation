@@ -1,3 +1,9 @@
+## Pokemon Simulation
+
+This project simulates a pool of pokemon that in each iteration, their generation adapts better to their predators and viceversa. 
+
+## How to run
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
